@@ -1,0 +1,10 @@
+id=documents-converter
+name=Documents Converter
+icon=icon.jpg
+description=Convert document formats via Pandoc.
+author=YasserNull
+version=v1.0.0
+versionCode=1
+repository=https://github.com/null-box-repo/documents-converter
+install=setup.sh
+permission=default

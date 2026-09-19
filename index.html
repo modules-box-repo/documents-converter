@@ -1,0 +1,99 @@
+<!-- Converter interface -->
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Documents Converter</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c6bff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/><path d='M13 2v7h7'/></svg>">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("dc-theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.dataset.theme = saved;
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="toolbar">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/></svg>
+      </span>
+      <span class="brand-name">Documents Converter</span>
+    </div>
+    <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Convert documents <span class="grad-text">between any format</span></h1>
+      <p class="sub">Pick one or more files, choose an output format, and every result is saved straight to your device.</p>
+    </section>
+
+    <section class="card">
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choose files">
+        <input type="file" id="file-input" multiple hidden accept=".md,.markdown,.txt,.text,.html,.htm,.xhtml,.docx,.odt,.epub,.fb2,.rtf,.org,.rst,.tex,.latex,.ltx,.json,.csv,.tsv,.xlsx,.pptx,.xml,.dbk,.tei,.ipynb,.opml,.bib,.typ,.typst,.wiki,.mediawiki,.muse,.man,.pod,.ms,.native">
+        <span class="dropzone-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </span>
+        <p class="dropzone-title">Choose files</p>
+      </div>
+
+      <p id="unsupported-note" class="unsupported-note" hidden></p>
+
+      <div class="file-section-head" id="file-section" hidden>
+        <h2>Selected files</h2>
+        <span id="file-count" class="count"></span>
+        <button id="clear-files" class="text-button" type="button">Clear</button>
+      </div>
+      <ul id="file-list" class="file-list"></ul>
+
+      <form id="convert-form" novalidate>
+        <div class="field">
+          <label for="format-select">Output format</label>
+          <div class="select-wrap">
+            <select id="format-select" name="format"></select>
+            <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="output-dir">Save to</label>
+          <div class="dir-row">
+            <input id="output-dir" type="text" spellcheck="false" value="/sdcard/Download">
+            <button id="dir-reset" class="icon-button small" type="button" aria-label="Reset save path">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button id="convert-button" class="primary-button" type="submit" disabled>
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>Convert files</span>
+          <svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="12" r="9" stroke-dasharray="60 200"/></svg>
+        </button>
+      </form>
+    </section>
+
+    <section class="card results" id="results-card" hidden>
+      <div class="file-section-head">
+        <h2>Results</h2>
+        <span id="summary" class="count"></span>
+      </div>
+      <ul id="status-list" class="status-list"></ul>
+    </section>
+  </main>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
